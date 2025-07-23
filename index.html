@@ -3,134 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>TX1 👨🏽‍💻💹</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #121826;
-      color: #e0e7ff;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
-    
-    .container {
-      background-color: #1e293b;
-      border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-      width: 95%;
-      max-width: 1000px;
-      padding: 25px;
-    }
-    
-    h1 {
-      text-align: center;
-      color: #818cf8;
-      margin-top: 0;
-      font-size: 2.5rem;
-    }
-    
-    .painel-central {
-      display: flex;
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-    
-    .coluna-esquerda, .coluna-direita {
-      background-color: #2d3748;
-      border-radius: 10px;
-      padding: 20px;
-      flex: 1;
-    }
-    
-    .coluna-esquerda {
-      min-width: 300px;
-    }
-    
-    p {
-      margin: 15px 0;
-      font-size: 1.1rem;
-    }
-    
-    #comando {
-      font-weight: bold;
-      font-size: 1.3rem;
-      padding: 5px 10px;
-      border-radius: 5px;
-    }
-    
-    .esperar {
-      background-color: #4b5563;
-      color: #d1d5db;
-    }
-    
-    .call {
-      background-color: #065f46;
-      color: #6ee7b7;
-    }
-    
-    .put {
-      background-color: #991b1b;
-      color: #fca5a5;
-    }
-    
-    #score {
-      font-weight: bold;
-      color: #818cf8;
-    }
-    
-    #timer {
-      font-weight: bold;
-      color: #fbbf24;
-    }
-    
-    #hora {
-      font-weight: bold;
-    }
-    
-    h3 {
-      color: #818cf8;
-      border-bottom: 1px solid #4b5563;
-      padding-bottom: 8px;
-    }
-    
-    ul {
-      padding-left: 20px;
-    }
-    
-    li {
-      margin-bottom: 8px;
-    }
-    
-    button {
-      background-color: #4f46e5;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      margin: 10px 5px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.3s;
-    }
-    
-    button:hover {
-      background-color: #6366f1;
-    }
-    
-    #historico {
-      font-weight: bold;
-    }
-    
-    .grafico {
-      border-radius: 10px;
-      overflow: hidden;
-      margin-top: 20px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
@@ -143,11 +16,7 @@
         <p>Última Análise: <span id="hora">--:--:--</span></p>
         <div>
           <h3>Critérios Técnicos</h3>
-          <ul id="criterios">
-            <li>Média Móvel: Aguardando...</li>
-            <li>RSI: Aguardando...</li>
-            <li>Suporte/Resistência: Aguardando...</li>
-          </ul>
+          <ul id="criterios"></ul>
         </div>
         <div>
           <button onclick="registrar('WIN')">WIN</button>
@@ -157,135 +26,19 @@
       </div>
       <div class="coluna-direita">
         <h3>Últimos Sinais</h3>
-        <ul id="ultimos">
-          <li>Nenhum sinal registrado</li>
-        </ul>
+        <ul id="ultimos"></ul>
       </div>
     </div>
-    <!-- Gráfico CHFJPY Atualizado -->
+    <!-- Gráfico alterado para CHFJPY -->
     <iframe class="grafico" 
-            src="https://s.tradingview.com/widgetembed/?symbol=FX:CHFJPY&interval=1&theme=dark&style=1"
+            src="https://s.tradingview.com/widgetembed/?symbol=FX:CHFJPY&interval=1&theme=dark"
             width="100%" 
-            height="400" 
+            height="350" 
             frameborder="0">
     </iframe>
   </div>
-  
   <audio id="som-call" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg" preload="auto"></audio>
   <audio id="som-put" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg" preload="auto"></audio>
-  
-  <script>
-    // Variáveis globais
-    let timer;
-    let segundos = 60;
-    let historico = { win: 0, loss: 0 };
-    let ultimosSinais = [];
-
-    // Inicialização
-    document.addEventListener('DOMContentLoaded', () => {
-      iniciarTimer();
-      atualizarHora();
-    });
-
-    // Atualiza o timer
-    function iniciarTimer() {
-      clearInterval(timer);
-      segundos = 60;
-      atualizarTimer();
-      
-      timer = setInterval(() => {
-        segundos--;
-        atualizarTimer();
-        
-        if (segundos <= 0) {
-          simularAnalise();
-          segundos = 60;
-        }
-      }, 1000);
-    }
-
-    function atualizarTimer() {
-      document.getElementById('timer').textContent = segundos;
-    }
-
-    function atualizarHora() {
-      const agora = new Date();
-      const horaFormatada = agora.toLocaleTimeString('pt-BR');
-      document.getElementById('hora').textContent = horaFormatada;
-    }
-
-    function simularAnalise() {
-      // Simulação de análise
-      atualizarHora();
-      
-      const comandos = ['CALL', 'PUT', 'ESPERAR'];
-      const comando = comandos[Math.floor(Math.random() * 3)];
-      
-      const score = Math.floor(Math.random() * 41) + 60; // 60-100%
-      
-      document.getElementById('score').textContent = `${score}%`;
-      
-      const elementoComando = document.getElementById('comando');
-      elementoComando.textContent = comando;
-      
-      // Atualiza classes CSS
-      elementoComando.className = '';
-      if (comando === 'CALL') {
-        elementoComando.classList.add('call');
-        document.getElementById('som-call').play();
-      } else if (comando === 'PUT') {
-        elementoComando.classList.add('put');
-        document.getElementById('som-put').play();
-      } else {
-        elementoComando.classList.add('esperar');
-      }
-      
-      // Atualiza critérios
-      const criterios = document.getElementById('criterios');
-      criterios.innerHTML = `
-        <li>Média Móvel: ${score > 70 ? 'Forte' : 'Moderada'}</li>
-        <li>RSI: ${comando !== 'ESPERAR' ? (comando === 'CALL' ? 'Supervendido' : 'Sobrecomprado') : 'Neutro'}</li>
-        <li>Suporte/Resistência: ${score > 75 ? 'Romper' : 'Respeito'}</li>
-      `;
-      
-      // Adiciona ao histórico de sinais
-      if (comando !== 'ESPERAR') {
-        const sinal = {
-          comando,
-          hora: document.getElementById('hora').textContent,
-          score
-        };
-        
-        ultimosSinais.unshift(sinal);
-        if (ultimosSinais.length > 5) ultimosSinais.pop();
-        
-        atualizarUltimosSinais();
-      }
-    }
-
-    function atualizarUltimosSinais() {
-      const lista = document.getElementById('ultimos');
-      lista.innerHTML = '';
-      
-      ultimosSinais.forEach(sinal => {
-        const item = document.createElement('li');
-        item.innerHTML = `<strong>${sinal.comando}</strong> - ${sinal.score}% (${sinal.hora})`;
-        item.style.color = sinal.comando === 'CALL' ? '#6ee7b7' : '#fca5a5';
-        lista.appendChild(item);
-      });
-      
-      if (ultimosSinais.length === 0) {
-        lista.innerHTML = '<li>Nenhum sinal registrado</li>';
-      }
-    }
-
-    function registrar(resultado) {
-      if (resultado === 'WIN') historico.win++;
-      if (resultado === 'LOSS') historico.loss++;
-      
-      document.getElementById('historico').textContent = 
-        `${historico.win} WIN / ${historico.loss} LOSS`;
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
